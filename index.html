@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CSS Квіз: Анімації та ефекти</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Exo+2:wght@400;600&display=swap">
+<style>
+:root{--bg:#060914;--panel:#0e1330;--text:#e8f0ff;--dim:#7f8bb5;--cyan:#00f0ff;--pink:#ff2bd6;--violet:#8a5cff;--amber:#ffb800;--ok:#19ff7a;--bad:#ff3355;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);background-image:linear-gradient(rgba(0,240,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,240,255,.05) 1px,transparent 1px);background-size:36px 36px;color:var(--text);font-family:"Exo 2",system-ui,sans-serif;font-size:18px}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 32px}
+h1,h2,.num,.btn{font-family:Orbitron,"Exo 2",sans-serif}
+.screen{display:none}.screen.on{display:block}
+.start,.end{text-align:center;padding-top:8vh}
+h1{font-size:clamp(28px,7vw,52px);line-height:1.15;margin:0 0 14px;color:var(--cyan);text-shadow:0 0 12px var(--cyan),0 0 36px rgba(0,240,255,.5)}
+.start p,.end p{color:var(--dim);max-width:520px;margin:0 auto 28px;line-height:1.5}
+.btn{font-weight:800;font-size:18px;color:var(--bg);background:var(--cyan);border:0;border-radius:12px;padding:16px 34px;cursor:pointer;box-shadow:0 0 22px rgba(0,240,255,.7)}
+.btn:hover{background:#7ffaff}
+.btn:focus-visible,.opt:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;font-family:Orbitron,sans-serif;font-size:14px}
+.top b{color:var(--amber);text-shadow:0 0 10px rgba(255,184,0,.7)}
+.bar{height:10px;background:var(--panel);border-radius:6px;overflow:hidden;margin-bottom:18px;border:1px solid rgba(0,240,255,.3)}
+.bar i{display:block;height:100%;width:100%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);transition:width .1s linear}
+.bar i.low{background:var(--pink);box-shadow:0 0 12px var(--pink)}
+.q{background:var(--panel);border:2px solid var(--cyan);border-radius:16px;padding:26px 22px;margin-bottom:18px;box-shadow:0 0 24px rgba(0,240,255,.35),inset 0 0 20px rgba(0,240,255,.08)}
+.q h2{margin:0;font-size:clamp(18px,3.6vw,26px);line-height:1.4;font-weight:600}
+code{font-family:"DejaVu Sans Mono",Consolas,monospace;font-size:.88em;color:var(--amber);background:rgba(255,184,0,.1);padding:1px 6px;border-radius:5px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.opt{display:flex;align-items:center;gap:14px;text-align:left;font:inherit;font-weight:600;color:var(--text);background:var(--panel);border:2px solid var(--c);border-radius:14px;padding:18px 16px;min-height:84px;cursor:pointer;box-shadow:0 0 14px var(--g);transition:transform .12s,background .2s,box-shadow .2s}
+.opt:hover:not(:disabled){transform:translateY(-3px);background:rgba(255,255,255,.06)}
+.opt .l{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:10px;background:var(--c);color:var(--bg);font-family:Orbitron,sans-serif;font-weight:800}
+.opt:nth-child(1){--c:var(--cyan);--g:rgba(0,240,255,.35)}
+.opt:nth-child(2){--c:var(--violet);--g:rgba(138,92,255,.4)}
+.opt:nth-child(3){--c:var(--pink);--g:rgba(255,43,214,.35)}
+.opt:nth-child(4){--c:var(--amber);--g:rgba(255,184,0,.35)}
+.opt:disabled{cursor:default}
+.opt.ok{--c:var(--ok);--g:rgba(25,255,122,.8);background:rgba(25,255,122,.18);transform:scale(1.02)}
+.opt.bad{--c:var(--bad);--g:rgba(255,51,85,.8);background:rgba(255,51,85,.2);animation:shake .35s}
+.opt.dim{opacity:.35;box-shadow:none}
+@keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.fb{min-height:64px;margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.msg{font-family:Orbitron,sans-serif;font-weight:800;font-size:18px}
+.msg.ok{color:var(--ok);text-shadow:0 0 12px var(--ok)}.msg.bad{color:var(--bad);text-shadow:0 0 12px var(--bad)}
+.score{font-family:Orbitron,sans-serif;font-size:clamp(40px,12vw,84px);font-weight:800;color:var(--ok);text-shadow:0 0 18px var(--ok);margin:10px 0}
+.end h2{font-size:28px;color:var(--pink);text-shadow:0 0 14px var(--pink);margin:0 0 6px}
+@media(max-width:620px){.opts{grid-template-columns:1fr}.opt{min-height:68px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="screen on start" id="s-start">
+    <h1>CSS Квіз</h1>
+    <p>Анімації та ефекти в CSS. 12 запитань, на кожне 40 секунд. Чим швидша правильна відповідь, тим більше балів.</p>
+    <button class="btn" id="go">Почати гру</button>
+  </section>
+
+  <section class="screen" id="s-q">
+    <div class="top"><span id="cnt"></span><span>Бали: <b id="pts">0</b></span><span id="tm"></span></div>
+    <div class="bar"><i id="fill"></i></div>
+    <div class="q"><h2 id="qt"></h2></div>
+    <div class="opts" id="opts"></div>
+    <div class="fb"><span class="msg" id="msg"></span><button class="btn" id="next" hidden>Далі</button></div>
+  </section>
+
+  <section class="screen end" id="s-end">
+    <h2>Гру завершено</h2>
+    <div class="score" id="fs"></div>
+    <p id="fr"></p>
+    <button class="btn" id="again">Грати ще раз</button>
+  </section>
+</div>
+<script>
+var Q=[
+["Які три основні складові CSS-анімації розглянуто на уроці?",["color, margin, padding","transform, transition, keyframes","display, position, float","hover, active, focus"],1],
+["В яких одиницях задається кут повороту у функціях <code>rotate()</code> та <code>skew()</code>?",["px","%","deg","s"],2],
+["Що відбувається з елементом при <code>transform: scale(0.5)</code>?",["Елемент зменшується вдвічі","Елемент збільшується вдвічі","Елемент повертається на 50 градусів","Елемент стає наполовину прозорим"],0],
+["Яке призначення функції <code>translate(x, y)</code>?",["Нахиляти сторони об'єкта","Змінювати розмір об'єкта","Повертати об'єкт навколо центру","Пересувати елемент без зміни властивостей <code>top</code> або <code>left</code>"],3],
+["Як спрямована вісь Y у вебі?",["Вгору, як у математиці","Вниз, на відміну від математики","Праворуч","Ліворуч"],1],
+["Що стверджується про порядок функцій у <code>transform</code>, наприклад <code>rotate(20deg) scale(1.2) translate(10px, 0)</code>?",["Порядок має значення, від нього залежить результат","Порядок не має значення","Браузер завжди виконує лише першу функцію","Функції можна записувати лише по одній"],0],
+["Який параметр <code>transition</code> визначає, скільки секунд триватиме зміна?",["<code>transition-property</code>","<code>transition-delay</code>","<code>transition-duration</code>","<code>transition-timing-function</code>"],2],
+["Яка функція швидкості (easing) забезпечує найбільш природний рух: повільно на початку та в кінці?",["<code>linear</code>","<code>ease-in</code>","<code>ease-out</code>","<code>ease-in-out</code>"],3],
+["Якому елементу потрібно задати властивість <code>perspective</code>, щоб 3D-поворот картки виглядав об'ємним?",["Будь-якому, окрім картки","Батьківському елементу (контейнеру), в якому лежить картка","Тільки елементу <code>body</code>","Лише самій картці"],1],
+["Яка головна відмінність між <code>transition</code> та <code>animation</code>?",["<code>transition</code> потребує тригера (наприклад, наведення миші) і має дві точки: початок і кінець","<code>animation</code> завжди потребує тригера, а <code>transition</code> запускається сама","<code>transition</code> може мати багато кроків і повторюватися нескінченно","Відмінностей немає, це однакові властивості"],0],
+["Яке призначення правила <code>@keyframes</code>?",["Задає колір тексту","Підключає зовнішній файл стилів","Визначає тінь елемента","Описує кроки анімації («режисерський план»)"],3],
+["Як призначити одному елементу кілька анімацій одночасно?",["Записати кожну анімацію окремим селектором","Перелічити їх у властивості <code>animation</code> через кому","Це неможливо, елемент має лише одну анімацію","Розділити їх крапкою з комою в одному значенні"],1]
+];
+var T=40,i,score,right,left,timer,locked;
+var $=function(id){return document.getElementById(id)};
+function show(id){["s-start","s-q","s-end"].forEach(function(s){$(s).classList.toggle("on",s===id)})}
+function start(){i=0;score=0;right=0;$("pts").textContent=0;show("s-q");render()}
+function render(){
+  var q=Q[i];locked=false;left=T;
+  $("cnt").textContent="Запитання "+(i+1)+" з "+Q.length;
+  $("qt").innerHTML=q[0];
+  $("msg").textContent="";$("msg").className="msg";$("next").hidden=true;
+  var o=$("opts");o.innerHTML="";
+  q[1].forEach(function(t,k){
+    var b=document.createElement("button");b.className="opt";b.type="button";
+    b.innerHTML='<span class="l">'+"ABCD"[k]+'</span><span>'+t+'</span>';
+    b.onclick=function(){answer(k)};o.appendChild(b);
+  });
+  tick();clearInterval(timer);timer=setInterval(function(){left-=0.1;if(left<=0){left=0;tick();answer(-1)}else tick()},100);
+}
+function tick(){
+  $("tm").textContent=Math.ceil(left)+" с";
+  var f=$("fill");f.style.width=(left/T*100)+"%";f.classList.toggle("low",left<6);
+}
+function answer(k){
+  if(locked)return;locked=true;clearInterval(timer);
+  var c=Q[i][2],bs=$("opts").children,m=$("msg");
+  for(var n=0;n<bs.length;n++){
+    bs[n].disabled=true;
+    if(n===c)bs[n].classList.add("ok");
+    else if(n===k)bs[n].classList.add("bad");
+    else bs[n].classList.add("dim");
+  }
+  if(k===c){
+    var p=Math.round(500+500*left/T);score+=p;right++;
+    m.textContent="Правильно! +"+p;m.classList.add("ok");
+  }else{
+    m.textContent=k===-1?"Час вичерпано":"Неправильно";m.classList.add("bad");
+  }
+  $("pts").textContent=score;
+  $("next").textContent=i===Q.length-1?"Результат":"Далі";
+  $("next").hidden=false;$("next").focus();
+}
+function finish(){
+  show("s-end");$("fs").textContent=score;
+  $("fr").textContent="Правильних відповідей: "+right+" з "+Q.length+".";
+}
+$("go").onclick=start;$("again").onclick=start;
+$("next").onclick=function(){if(i<Q.length-1){i++;render()}else finish()};
+</script>
+</body>
+</html>
