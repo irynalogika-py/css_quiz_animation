@@ -1,6 +1,6 @@
 # CSS Quiz: Animations and Effects
 
-A small interactive quiz web application built with plain HTML, CSS, and JavaScript. It tests knowledge of CSS animations, transforms, transitions, and 3D effects through a timed multiple-choice format.
+A small inte ractive quiz web application built with plain HTML, CSS, and JavaScript. It tests knowledge of CSS animations, transforms, transitions, and 3D effects through a timed multiple-choice format.
 
 ## Overview
 
